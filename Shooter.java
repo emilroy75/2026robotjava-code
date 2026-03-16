@@ -12,3 +12,25 @@ public class shooter extends SubsystemBase {
     public Shooter(ShooterIO io){
         this.io = io;
     }
+
+    @Override
+        public void periodic (){
+            io.updateInputs(inputs)
+            Logger.processInputs("Shooter", inputs);
+        }
+
+    public void setSpeed(double speed){
+        io.setSpeed(speed);
+    }
+
+    public void stop(){
+        io.stop();
+    }
+
+    public double getVelocityRPM() {
+        return inputs.velocityRPM;
+    }
+
+    public Boolean atTargetRPM(double targetRPM) < 100.0;
+    }
+}
