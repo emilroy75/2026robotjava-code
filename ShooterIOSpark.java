@@ -29,6 +29,7 @@ public class ShooterIOSpark implements ShooterIO{
             motor.setIdleMode(IdleMode.kCoast);
             motor.burnFlash();
         }
+   }
 
     @Override
         public void updateInputs(ShooterIOInputs inputs){
