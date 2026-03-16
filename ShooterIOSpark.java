@@ -32,4 +32,9 @@ public class ShooterIOSpark implements ShooterIO{
     }
 
     @Override
-        public void updateInputs
+        public void updateInputs(ShooterIOInputs inputs){
+            inputs.velocityRPM = encoder1.getVelocity();
+            inputs.appliedVolts = motor1.getAppliedOutput() * motor1.getBusVoltage();
+            inputs.currentAmps = getOutputCurrent();
+            inputs.motorConnected = true;
+        }
