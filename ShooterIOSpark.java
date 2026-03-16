@@ -38,3 +38,18 @@ public class ShooterIOSpark implements ShooterIO{
             inputs.currentAmps = getOutputCurrent();
             inputs.motorConnected = true;
         }
+
+    @override
+        public void setSpeed(double speed){
+            motor1.set(speed)
+            motor2.set(speed)
+            motor3 set(speed)
+        }
+
+    @override
+        public void stop(){
+            motor1.set(0.0)
+            motor2.set(0.0)
+            motor3.set(0.0)
+        }
+    }
