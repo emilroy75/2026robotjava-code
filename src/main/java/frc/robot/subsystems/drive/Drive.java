@@ -313,4 +313,12 @@ public class Drive extends SubsystemBase {
   public double getMaxAngularSpeedRadPerSec() {
     return maxSpeedMetersPerSec / driveBaseRadius;
   }
+
+    public double getHeadingDegrees() {
+    return getPose().getRotation().getDegrees();
+  }
+
+  public Rotation2d getHeading() {
+    return getPose().getRotation();
+  }
 }
