@@ -31,7 +31,7 @@ public class ShooterMath {
 
   public static double velocityToRPM(double velocity) {
     double wheelRPM = (velocity / WHEEL_RADIUS) * 60 / (2.0 * Math.PI);
-    return wheelRPM*ShooterConstants.SHOOT_BELT_RATIO;
+    return wheelRPM * ShooterConstants.SHOOT_BELT_RATIO;
   }
 
   public static double calculateEnergyCompensation(double velocity) {

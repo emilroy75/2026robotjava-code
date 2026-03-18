@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
 
+  private double targtRPM = 0.0;
   private final ShooterIO io;
   private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
 
@@ -16,6 +17,8 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Shooter", inputs);
+    Logger.recordOutput("Shooter/TargetRPM", targtRPM);
+    Logger.recordOutput("Shooter/ActualRPM", inputs.shootVelocityRPM);
   }
 
   public void setShootSpeed(double speed) {
@@ -41,7 +44,9 @@ public class Shooter extends SubsystemBase {
   public boolean atTargetRPM(double targetRPM) {
     return Math.abs(inputs.shootVelocityRPM - targetRPM) < 100.0;
   }
+
   public void setShootVelocity(double rpm) {
+    this.targtRPM = rpm;
     io.setShootVelocity(rpm);
   }
 }
