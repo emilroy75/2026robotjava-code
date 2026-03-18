@@ -1,14 +1,15 @@
 # Robot Technical Questions
 
 ## Shooter Subsystem
-- [ ] **Gearbox Reduction:** What are the actual ratios for the shooter motors and the feeder motor?
-- [ ] **Current Limit:** What is the correct current limit (Amps) for the NEO v1.1 motors on the shooter?
-- [ ] **CAN IDs:** What are the CAN IDs for `shootMotor1`, `shootMotor2`, and `feedMotor`?
-- [ ] **Wheel Radius:** What is the exact radius of the shooter wheels?
-- [ ] **Belt Ratio:** Is there a belt ratio between the motor and the shooting wheels?
-- [ ] **Exit Angle:** What is the ball's exit angle from the shooter?
+- [ ] **Launch Angle:** What is the exact angle (in degrees or radians) of your shooter's launch point?
+- [ ] **Shooter Height:** How many meters above the floor is the shooter's exit point?
+- [ ] **Wheel Radius:** What is the radius of the shooter wheels in meters? (currently estimating 2.0 inches)
+- [ ] **Hub Height:** What is the height of the Speaker for the 2026 game?
 
-## Fuel Tracking / Autonomous
-- [ ] **Zone Coordinates:** What are the X and Y coordinates for the collection zone?
-- [ ] **Scoring Position:** What are the X and Y coordinates for the scoring position?
-- [ ] **Zone Boundaries:** What are the specific boundaries for the collection zone from the game manual?
+## Hub Coordinates
+- [ ] **Blue Hub X/Y:** What are the exact coordinates for the Blue Speaker?
+- [ ] **Red Hub X/Y:** What are the exact coordinates for the Red Speaker?
+
+## Fuel Tracking
+- [ ] **Collection Zone:** What are the boundaries for the collection zone?
+- [ ] **Ball Tracking Rotation:** Should the robot rotate to face the ball while collecting?
