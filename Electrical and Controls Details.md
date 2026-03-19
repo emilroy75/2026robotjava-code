@@ -12,8 +12,8 @@
 | 8      | BRT         | Back Right Turn     | Spark Max              | Positive = Spins CCW     |
 | 9      | INR         | Intake Rollers      | Spark Max              | Positive = Intake Ball   |
 | 10     | IND         | Intake Deploy       | Spark Max              | Positive = Retract       |
-| 11     | SEF         | Shooter Eject Front | Spark Max              | TBD                      |
-| 12     | SEB         | Shooter Eject Back  | Spark Max              | TBD                      |
+| 11     | SEF         | Shooter Eject Front | Spark Max              | Forward = Shoot          |
+| 12     | SEB         | Shooter Eject Back  | Spark Max              | Reverse = Shoot          |
 | 13     | SFD         | Shooter Feeder      | Spark Max              | Positive = Reject Ball   |
 | 14     | CLM         | Climber             | Spark Max              | TBD                      |
 | 15     | AGT         | Agitator            | Spark Max              | Positive = Into Shooter  |
