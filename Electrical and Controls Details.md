@@ -22,7 +22,11 @@
 
 # CAN Topology
 
+<<<<<<< HEAD
 (Term) RIO -> SEB -> BRD -> BRT -> CLM-> SFD -> FRT -> SEF -> FRD -> FLT -> INR -> IND -> FLD -> BLT -> BLD-> PDH -> AGI (Term)
+=======
+(Term) RIO -> SEB -> BRD -> BRT -> CLM-> SFD -> FRT -> SEF -> FRD -> FLT -> INR -> IND -> FLD -> BLT -> BLD-> PDH -> AGI (Term)  
+>>>>>>> 9a7cbe370edca70db91c8e4f4b07b83d58388bce
 
 # PDH Connections
 
@@ -57,7 +61,14 @@
 
 # IP Addresses
 
+<<<<<<< HEAD
 10.2.50.1 - Radio
 10.2.50.2 - RoboRIO
 10.2.50.6 - RaspberryPi (Photon Vision)
 10.2.50.7 - RaspberryPi (Machine Vision)
+=======
+10.2.50.1 - Radio  
+10.2.50.2 - RoboRIO  
+10.2.50.6 - RaspberryPi (Photon Vision)  
+10.2.50.7 - RaspberryPi (Machine Vision)  
+>>>>>>> 9a7cbe370edca70db91c8e4f4b07b83d58388bce
