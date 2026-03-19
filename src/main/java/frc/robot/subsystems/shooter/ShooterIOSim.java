@@ -9,18 +9,18 @@ public class ShooterIOSim implements ShooterIO {
   private final DCMotorSim shootSim =
       new DCMotorSim(
           LinearSystemId.createDCMotorSystem(
-              ShooterConstants.shootGearBox,
-              ShooterConstants.shootMOI,
+              ShooterConstants.shootGearbox,
+              ShooterConstants.totalWheelMOI,
               ShooterConstants.shootReduction),
-          ShooterConstants.shootGearBox);
+          ShooterConstants.shootGearbox);
 
   private final DCMotorSim feedSim =
       new DCMotorSim(
           LinearSystemId.createDCMotorSystem(
-              ShooterConstants.feedGearBox,
-              ShooterConstants.shootMOI,
+              ShooterConstants.feedGearbox,
+              ShooterConstants.feedMOI,
               ShooterConstants.feedReduction),
-          ShooterConstants.feedGearBox);
+          ShooterConstants.feedGearbox);
 
   private double shootAppliedVolts = 0.0;
   private double feedAppliedVolts = 0.0;

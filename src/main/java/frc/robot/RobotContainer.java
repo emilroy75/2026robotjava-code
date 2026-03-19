@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.FuelTrackingCommand;
+import frc.robot.subsystems.agitator.*;
+import frc.robot.subsystems.climber.*;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX;
@@ -25,11 +27,8 @@ import frc.robot.subsystems.drive.GyroIONavX;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
-import frc.robot.subsystems.shooter.Shooter;
-import frc.robot.subsystems.shooter.ShooterConstants;
-import frc.robot.subsystems.shooter.ShooterIO;
-import frc.robot.subsystems.shooter.ShooterIOSim;
-import frc.robot.subsystems.shooter.ShooterIOSpark;
+import frc.robot.subsystems.intake.*;
+import frc.robot.subsystems.shooter.*;
 import frc.robot.subsystems.vision.FuelDetection;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
@@ -51,9 +50,13 @@ public class RobotContainer {
   private final FuelDetection fuelDetection = new FuelDetection();
   private final FuelTrackingCommand fuelTracking;
   private final Shooter shooter;
-  // Controller
+  private final Intake intake;
+  private final Climber climber;
+  private final Agitator agitator;
+
+  // Controllers
   private final CommandXboxController driverController = new CommandXboxController(0);
-  private final CommandXboxController manipulatorController = new CommandXboxController(1);
+  private final CommandXboxController operatorController = new CommandXboxController(1);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -79,9 +82,13 @@ public class RobotContainer {
         shooter =
             new Shooter(
                 new ShooterIOSpark(
-                    ShooterConstants.shootMotor1CanId,
-                    ShooterConstants.shootMotor2CanId,
+                    ShooterConstants.shootFrontCanId,
+                    ShooterConstants.shootBackCanId,
                     ShooterConstants.feedMotorCanId));
+        intake =
+            new Intake(new IntakeIOSpark(IntakeConstants.deployCanId, IntakeConstants.rollerCanId));
+        climber = new Climber(new ClimberIOSpark());
+        agitator = new Agitator(new AgitatorIOSpark());
         break;
 
       case SIM:
@@ -103,6 +110,9 @@ public class RobotContainer {
                 new VisionIOPhotonVisionSim(
                     "Right_Camera", VisionConstants.robotToCamera2, drive::getPose));
         shooter = new Shooter(new ShooterIOSim());
+        intake = new Intake(new IntakeIOSim());
+        climber = new Climber(new ClimberIOSim());
+        agitator = new Agitator(new AgitatorIOSim());
         break;
 
       default:
@@ -121,6 +131,9 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {});
         shooter = new Shooter(new ShooterIO() {});
+        intake = new Intake(new IntakeIO() {});
+        climber = new Climber(new ClimberIO() {});
+        agitator = new Agitator(new AgitatorIO() {});
         break;
     }
     fuelTracking = new FuelTrackingCommand(drive, fuelDetection);

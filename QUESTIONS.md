@@ -1,15 +1,15 @@
 # Robot Technical Questions
 
+## Intake Subsystem
+- [ ] **Pivot CAN ID:** What is the CAN ID for the deployment motor?
+- [ ] **Roller CAN ID:** What is the CAN ID for the roller motor?
+- [ ] **Pivot Gear Ratio:** What is the total reduction for the pivot mechanism?
+- [ ] **Travel Limits:** What are the radian values for "Fully Retracted" and "Fully Deployed"?
+
 ## Shooter Subsystem
-- [ ] **Launch Angle:** What is the exact angle (in degrees or radians) of your shooter's launch point?
-- [ ] **Shooter Height:** How many meters above the floor is the shooter's exit point?
-- [ ] **Wheel Radius:** What is the radius of the shooter wheels in meters? (currently estimating 2.0 inches)
-- [ ] **Hub Height:** What is the height of the Speaker for the 2026 game?
+- [ ] **Shoot Belt Ratio:** What is the ratio between the motor pulley and the shooter axle pulley? (e.g., 24T to 36T = 1.5)
+- [ ] **Motor Orientation:** Are the two shooter motors spinning the same way, or does one need to be inverted?
 
-## Hub Coordinates
-- [ ] **Blue Hub X/Y:** What are the exact coordinates for the Blue Speaker?
-- [ ] **Red Hub X/Y:** What are the exact coordinates for the Red Speaker?
-
-## Fuel Tracking
-- [ ] **Collection Zone:** What are the boundaries for the collection zone?
-- [ ] **Ball Tracking Rotation:** Should the robot rotate to face the ball while collecting?
+## Hub & Field
+- [ ] **Red Hub Coordinates:** Confirm the exact X/Y from the game manual.
+- [ ] **Blue Hub Coordinates:** Confirm the exact X/Y from the game manual.

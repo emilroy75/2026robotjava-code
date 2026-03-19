@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter;
 
+import static frc.robot.subsystems.shooter.ShooterConstants.*;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkBase;
@@ -24,14 +26,17 @@ public class ShooterIOSpark implements ShooterIO {
     shootController = shootMotor1.getClosedLoopController();
 
     var shootConfig = new SparkMaxConfig();
-    shootConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(ShooterConstants.shootCurrentLimit);
-    shootConfig.closedLoop.p(0.0001).feedForward.kV(0.00017);
+    shootConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(shootCurrentLimitAmps);
+    shootConfig.closedLoop.p(shootKp).feedForward.kV(shootKv);
 
     var followerConfig = new SparkMaxConfig();
-    followerConfig.idleMode(IdleMode.kCoast).follow(shootMotor1);
+    followerConfig
+        .idleMode(IdleMode.kCoast)
+        .inverted(true) // Back motor is reverse according to MD
+        .follow(shootMotor1);
 
     var feedConfig = new SparkMaxConfig();
-    feedConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(ShooterConstants.feedCurrentLimit);
+    feedConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(feedCurrentLimitAmps);
 
     shootMotor1.configure(
         shootConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -58,6 +63,11 @@ public class ShooterIOSpark implements ShooterIO {
   }
 
   @Override
+  public void setShootSpeed(double speed) {
+    shootMotor1.set(speed);
+  }
+
+  @Override
   public void setFeedSpeed(double speed) {
     feedMotor.set(speed);
   }
@@ -65,7 +75,6 @@ public class ShooterIOSpark implements ShooterIO {
   @Override
   public void stop() {
     shootMotor1.set(0.0);
-    shootMotor2.set(0.0);
     feedMotor.set(0.0);
   }
 }

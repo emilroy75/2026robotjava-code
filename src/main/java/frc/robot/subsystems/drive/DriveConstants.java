@@ -37,22 +37,21 @@ public class DriveConstants {
   // Device CAN IDs
   public static final int pigeonCanId = 9;
 
-  public static final int frontLeftDriveCanId = 2;
-  public static final int backLeftDriveCanId = 6;
-  public static final int frontRightDriveCanId = 4;
-  public static final int backRightDriveCanId = 8;
+  public static final int frontLeftDriveCanId = 1;
+  public static final int backLeftDriveCanId = 5;
+  public static final int frontRightDriveCanId = 3;
+  public static final int backRightDriveCanId = 7;
 
-  public static final int frontLeftTurnCanId = 3;
-  public static final int backLeftTurnCanId = 7;
-  public static final int frontRightTurnCanId = 5;
-  public static final int backRightTurnCanId = 9;
+  public static final int frontLeftTurnCanId = 2;
+  public static final int backLeftTurnCanId = 6;
+  public static final int frontRightTurnCanId = 4;
+  public static final int backRightTurnCanId = 8;
 
   // Drive motor configuration
   public static final int driveMotorCurrentLimit = 30;
   public static final double wheelRadiusMeters = Units.inchesToMeters(1.5);
-  public static final double driveMotorReduction = 6.75; // MAXSwerve with 14 pinion teeth
-  // and 22 spur teeth
-  public static final DCMotor driveGearbox = DCMotor.getNEO(1);
+  public static final double driveMotorReduction = (45.0 * 22.0) / (13.0 * 15.0);
+  public static final DCMotor driveGearbox = DCMotor.getNeoVortex(1);
 
   // Drive encoder configuration
   public static final double driveEncoderPositionFactor =
@@ -76,7 +75,7 @@ public class DriveConstants {
   public static final boolean turnInverted = false;
   public static final int turnMotorCurrentLimit = 20;
   public static final double turnMotorReduction = 9424.0 / 203.0;
-  public static final DCMotor turnGearbox = DCMotor.getNeo550(1);
+  public static final DCMotor turnGearbox = DCMotor.getNEO(1);
 
   // Turn encoder configuration
   public static final boolean turnEncoderInverted = true;

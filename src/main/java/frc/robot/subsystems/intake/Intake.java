@@ -28,12 +28,15 @@ public class Intake extends SubsystemBase {
   public void stop() {
     io.stop();
   }
-  public void deploy(){
+
+  public void deploy() {
     io.setPivotSpeed(0.3);
   }
-  public void retract(){
+
+  public void retract() {
     io.setPivotSpeed(-0.3);
   }
+
   public double gtPivotPosition() {
     return inputs.pivotPositionRad;
   }
