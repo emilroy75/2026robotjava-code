@@ -1,6 +1,5 @@
 # CAN Devices
 
-
 | CAN ID | Abreviation | Name                | Device Type            | Motion Notes             |
 | -------- | ------------- | --------------------- | ------------------------ | -------------------------- |
 | 1      | FLD         | Front Left Drive    | Spark Flex             | Spins                    |
@@ -23,7 +22,7 @@
 
 # CAN Topology
 
-(Term) RIO -> SEB -> BRD -> BRT -> CLM-> SFD -> FRT -> SEF -> FRD -> FLT -> INR -> IND -> FLD -> BLT -> BLD-> PDH -> AGI (Term)
+(Term) RIO -> SEB -> BRD -> BRT -> CLM-> SFD -> FRT -> SEF -> FRD -> FLT -> INR -> IND -> FLD -> BLT -> BLD-> PDH -> AGI (Term)  
 
 # PDH Connections
 
@@ -58,7 +57,7 @@
 
 # IP Addresses
 
-10.2.50.1 - Radio
-10.2.50.2 - RoboRIO
-10.2.50.6 - RaspberryPi (Photon Vision)
-10.2.50.7 - RaspberryPi (Machine Vision)
+10.2.50.1 - Radio  
+10.2.50.2 - RoboRIO  
+10.2.50.6 - RaspberryPi (Photon Vision)  
+10.2.50.7 - RaspberryPi (Machine Vision)  
