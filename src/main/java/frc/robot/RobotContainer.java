@@ -47,14 +47,14 @@ public class RobotContainer {
   private final Vision vision;
   // private final FuelDetection fuelDetection = new FuelDetection();
   //   private final FuelTrackingCommand fuelTracking;
-  //   private final Shooter shooter;
+  private final Shooter shooter;
   //   private final Intake intake;
   //   private final Climber climber;
-  //   private final Agitator agitator;
+  private final Agitator agitator;
 
   // Controllers
   private final CommandXboxController driverController = new CommandXboxController(0);
-  private final CommandXboxController operatorController = new CommandXboxController(1);
+  //   private final CommandXboxController operatorController = new CommandXboxController(1);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -77,17 +77,17 @@ public class RobotContainer {
                 new VisionIOPhotonVision("Front_Camera", VisionConstants.robotToCamera0),
                 new VisionIOPhotonVision("Left_Camera", VisionConstants.robotToCamera1),
                 new VisionIOPhotonVision("Right_Camera", VisionConstants.robotToCamera2));
-        // shooter =
-        //     new Shooter(
-        //         new ShooterIOSpark(
-        //             ShooterConstants.shootFrontCanId,
-        //             ShooterConstants.shootBackCanId,
-        //             ShooterConstants.feedMotorCanId));
+        shooter =
+            new Shooter(
+                new ShooterIOSpark(
+                    ShooterConstants.shootFrontCanId,
+                    ShooterConstants.shootBackCanId,
+                    ShooterConstants.feedMotorCanId));
         // intake =
         //     new Intake(new IntakeIOSpark(IntakeConstants.deployCanId,
         // IntakeConstants.rollerCanId));
         // climber = new Climber(new ClimberIOSpark());
-        // agitator = new Agitator(new AgitatorIOSpark());
+        agitator = new Agitator(new AgitatorIOSpark());
         break;
 
       case SIM:
@@ -108,10 +108,10 @@ public class RobotContainer {
                     "Left_Camera", VisionConstants.robotToCamera1, drive::getPose),
                 new VisionIOPhotonVisionSim(
                     "Right_Camera", VisionConstants.robotToCamera2, drive::getPose));
-        // shooter = new Shooter(new ShooterIOSim());
+        shooter = new Shooter(new ShooterIOSim());
         // intake = new Intake(new IntakeIOSim());
         // climber = new Climber(new ClimberIOSim());
-        // agitator = new Agitator(new AgitatorIOSim());
+        agitator = new Agitator(new AgitatorIOSim());
         break;
 
       default:
@@ -129,10 +129,10 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {},
                 new VisionIO() {});
-        // shooter = new Shooter(new ShooterIO() {});
+        shooter = new Shooter(new ShooterIO() {});
         // intake = new Intake(new IntakeIO() {});
         // climber = new Climber(new ClimberIO() {});
-        // agitator = new Agitator(new AgitatorIO() {});
+        agitator = new Agitator(new AgitatorIO() {});
         break;
     }
     // fuelTracking = new FuelTrackingCommand(drive, fuelDetection);
@@ -157,6 +157,12 @@ public class RobotContainer {
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     // autoChooser.addOption("Fuel Tracking", fuelTracking);
+    // autoChooser.addOption("shootfromstart", Commands.sequence(
+    //     Commands.parallel(
+    //         Commands.runEnd(()->shooter.setShootSpeed(1.0),
+    //         ()->  shooter.stop(),shooter).until(() -> shooter.atTargetRPM(4640)),
+    //         Commands.run(agitator.runAgitator(.5), null)
+    // )));
 
     // Configure the button bindings
     configureButtonBindings();
