@@ -29,8 +29,8 @@ public class ShooterConstants {
   public static final double feedReduction = 2.18;
   // Motor Configuration
   public static final DCMotor shootGearbox = DCMotor.getNEO(2);
-  public static final int shootCurrentLimitAmps = 40;
-  public static final int feedCurrentLimitAmps = 30;
+  public static final int shootCurrentLimitAmps = 80;
+  public static final int feedCurrentLimitAmps = 40;
   public static final DCMotor feedGearbox = DCMotor.getNEO(1);
 
   // PID Tuning

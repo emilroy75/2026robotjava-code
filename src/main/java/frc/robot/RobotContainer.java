@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.BallHandlingCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.agitator.*;
 import frc.robot.subsystems.climber.*;
@@ -28,11 +29,6 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.shooter.*;
-import frc.robot.subsystems.vision.Vision;
-import frc.robot.subsystems.vision.VisionConstants;
-import frc.robot.subsystems.vision.VisionIO;
-import frc.robot.subsystems.vision.VisionIOPhotonVision;
-import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -44,7 +40,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  private final Vision vision;
+  //  private final Vision vision;
   // private final FuelDetection fuelDetection = new FuelDetection();
   //   private final FuelTrackingCommand fuelTracking;
   private final Shooter shooter;
@@ -71,12 +67,12 @@ public class RobotContainer {
                 new ModuleIOSpark(1),
                 new ModuleIOSpark(2),
                 new ModuleIOSpark(3));
-        vision =
-            new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOPhotonVision("Front_Camera", VisionConstants.robotToCamera0),
-                new VisionIOPhotonVision("Left_Camera", VisionConstants.robotToCamera1),
-                new VisionIOPhotonVision("Right_Camera", VisionConstants.robotToCamera2));
+        // vision =
+        //    new Vision(
+        //        drive::addVisionMeasurement,
+        //        new VisionIOPhotonVision("Front_Camera", VisionConstants.robotToCamera0),
+        //        new VisionIOPhotonVision("Left_Camera", VisionConstants.robotToCamera1),
+        //        new VisionIOPhotonVision("Right_Camera", VisionConstants.robotToCamera2));
         shooter =
             new Shooter(
                 new ShooterIOSpark(
@@ -99,15 +95,15 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim(),
                 new ModuleIOSim());
-        vision =
-            new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOPhotonVisionSim(
-                    "Front_Camera", VisionConstants.robotToCamera0, drive::getPose),
-                new VisionIOPhotonVisionSim(
-                    "Left_Camera", VisionConstants.robotToCamera1, drive::getPose),
-                new VisionIOPhotonVisionSim(
-                    "Right_Camera", VisionConstants.robotToCamera2, drive::getPose));
+        // vision =
+        //     new Vision(
+        //         drive::addVisionMeasurement,
+        //         new VisionIOPhotonVisionSim(
+        //             "Front_Camera", VisionConstants.robotToCamera0, drive::getPose),
+        //         new VisionIOPhotonVisionSim(
+        //             "Left_Camera", VisionConstants.robotToCamera1, drive::getPose),
+        //         new VisionIOPhotonVisionSim(
+        //             "Right_Camera", VisionConstants.robotToCamera2, drive::getPose));
         shooter = new Shooter(new ShooterIOSim());
         // intake = new Intake(new IntakeIOSim());
         // climber = new Climber(new ClimberIOSim());
@@ -123,12 +119,12 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
-        vision =
-            new Vision(
-                drive::addVisionMeasurement,
-                new VisionIO() {},
-                new VisionIO() {},
-                new VisionIO() {});
+        // vision =
+        //     new Vision(
+        //         drive::addVisionMeasurement,
+        //         new VisionIO() {},
+        //         new VisionIO() {},
+        //         new VisionIO() {});
         shooter = new Shooter(new ShooterIO() {});
         // intake = new Intake(new IntakeIO() {});
         // climber = new Climber(new ClimberIO() {});
@@ -209,6 +205,18 @@ public class RobotContainer {
 
     // turn 45 degrees
     driverController.y().onTrue(DriveCommands.rotateByDegrees(drive, 45.0));
+    driverController
+        .start()
+        .onTrue(BallHandlingCommands.spinAgitator(agitator, 0.75))
+        .onFalse(BallHandlingCommands.stopgitator(agitator));
+    driverController
+        .back()
+        .onTrue(BallHandlingCommands.spinFeeder(shooter, 0.5))
+        .onFalse(BallHandlingCommands.stopFeeder(shooter));
+    driverController
+        .leftTrigger()
+        .onTrue(BallHandlingCommands.spinShooter(shooter, 0.85))
+        .onFalse(BallHandlingCommands.stopShooter(shooter));
   }
 
   /**

@@ -2,8 +2,6 @@ package frc.robot.subsystems.agitator;
 
 import static frc.robot.subsystems.agitator.AgitatorConstants.*;
 
-import com.revrobotics.PersistMode;
-import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -15,7 +13,7 @@ public class AgitatorIOSpark implements AgitatorIO {
     motor = new SparkMax(agitatorId, MotorType.kBrushless);
     var config = new SparkMaxConfig();
     config.smartCurrentLimit(currentLimitAmps);
-    motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    // motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   @Override

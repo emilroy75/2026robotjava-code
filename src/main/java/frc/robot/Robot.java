@@ -75,7 +75,7 @@ public class Robot extends LoggedRobot {
         && DriverStation.getAlliance().get() == Alliance.Red) {
       HubPose = new Pose2d(182, 158, new Rotation2d(0));
       turnMotorInverted = false;
-      
+
     } else if (DriverStation.getAlliance().isPresent()
         && DriverStation.getAlliance().get() == Alliance.Blue) {
       HubPose = new Pose2d(468, 158, new Rotation2d(0));

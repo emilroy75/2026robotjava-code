@@ -14,6 +14,8 @@ public interface ShooterIO {
     public double feedCurrentAmps = 0.0;
     public boolean shootMotorsConnected = true;
     public boolean feedMotorConnected = true;
+    public double shootSpeed1 = 0.0;
+    public double shootSpeed2 = 0.0;
   }
 
   default void updateInputs(ShooterIOInputs inputs) {}
