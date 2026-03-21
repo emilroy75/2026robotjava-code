@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.BallHandlingCommands;
+import frc.robot.commands.ComboAuton;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.agitator.*;
 import frc.robot.subsystems.climber.*;
@@ -152,13 +153,7 @@ public class RobotContainer {
         "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    // autoChooser.addOption("Fuel Tracking", fuelTracking);
-    // autoChooser.addOption("shootfromstart", Commands.sequence(
-    //     Commands.parallel(
-    //         Commands.runEnd(()->shooter.setShootSpeed(1.0),
-    //         ()->  shooter.stop(),shooter).until(() -> shooter.atTargetRPM(4640)),
-    //         Commands.run(agitator.runAgitator(.5), null)
-    // )));
+    autoChooser.addOption("Combo-Auto", ComboAuton.shootFuel(shooter, agitator));
 
     // Configure the button bindings
     configureButtonBindings();
