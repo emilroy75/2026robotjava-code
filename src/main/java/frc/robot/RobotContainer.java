@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -31,7 +32,6 @@ import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.shooter.*;
 import frc.robot.util.ShooterMath;
-
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -50,6 +50,7 @@ public class RobotContainer {
   private final Intake intake;
   //   private final Climber climber;
   private final Agitator agitator;
+  private static double TargetSpeed = 0.0;
 
   // Controllers
   private final CommandXboxController driverController = new CommandXboxController(0);
@@ -83,8 +84,7 @@ public class RobotContainer {
                     ShooterConstants.shootBackCanId,
                     ShooterConstants.feedMotorCanId));
         intake =
-            new Intake(new IntakeIOSpark(IntakeConstants.deployCanId,
-        IntakeConstants.rollerCanId));
+            new Intake(new IntakeIOSpark(IntakeConstants.deployCanId, IntakeConstants.rollerCanId));
         // climber = new Climber(new ClimberIOSpark());
         agitator = new Agitator(new AgitatorIOSpark());
         break;
@@ -157,6 +157,12 @@ public class RobotContainer {
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     autoChooser.addOption("Combo-Auto", ComboAuton.shootFuel(shooter, agitator));
 
+    // smart dashboard
+    SmartDashboard.putNumber("speed", 0);
+    SmartDashboard.putNumber("shootvelocityrpm", shooter.getShootVelocityRPM());
+    // TargetSpeed = SmartDashboard.getNumber("speed", 0);
+    // Configure the button bindings
+    configureButtonBindings();
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -201,7 +207,7 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     // turn 45 degrees
-    driverController.y().onTrue(DriveCommands.rotateByDegrees(drive, 45.0));
+    // driverController.y().onTrue(DriveCommands.rotateByDegrees(drive, 45.0));
     driverController
         .start()
         .onTrue(BallHandlingCommands.spinAgitator(agitator, 0.75))
@@ -216,15 +222,21 @@ public class RobotContainer {
         .onFalse(BallHandlingCommands.stopShooter(shooter));
     driverController
         .rightTrigger()
-        .whileTrue((Commands.runEnd(() -> intake.setRollerSpeed(.75),
-            ()-> intake.stop(), intake)));
-    // auto aim 
+        .whileTrue(
+            (Commands.runEnd(() -> intake.setRollerSpeed(.75), () -> intake.stop(), intake)));
+    // auto aim
     driverController
         .rightBumper()
-        .whileTrue(DriveCommands.joystickDriveAtAngle(drive, 
-        () -> driverController.getLeftX(),
-        () -> driverController.getLeftY(),
-        () -> ShooterMath.getAngleToHub(drive.getPose())));
+        .whileTrue(
+            DriveCommands.joystickDriveAtAngle(
+                drive,
+                () -> driverController.getLeftX(),
+                () -> driverController.getLeftY(),
+                () -> ShooterMath.getAngleToHub(drive.getPose())));
+    driverController
+        .y()
+        .whileTrue(BallHandlingCommands.setRPM(shooter))
+        .whileFalse(Commands.run(() -> shooter.stop(), shooter));
   }
 
   /**

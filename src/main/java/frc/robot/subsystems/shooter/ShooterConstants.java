@@ -35,5 +35,5 @@ public class ShooterConstants {
 
   // PID Tuning
   public static final double shootKp = 0.0001;
-  public static final double shootKv = 0.00017;
+  public static final double shootKv = 12/5767;
 }

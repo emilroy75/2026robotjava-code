@@ -45,8 +45,12 @@ public class Shooter extends SubsystemBase {
     return Math.abs(inputs.shootVelocityRPM - targetRPM) < 100.0;
   }
 
-  public void setShootVelocity(double rpm) {
-    this.targtRPM = rpm;
-    io.setShootVelocity(rpm);
+  public void setShootVelocity() {
+    // this.targtRPM = rpm;
+    io.setShootVelocity();
+  }
+
+  public void runFeeder() {
+    io.runFeeder();
   }
 }

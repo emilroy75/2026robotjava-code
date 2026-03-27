@@ -26,5 +26,7 @@ public interface ShooterIO {
 
   default void stop() {}
 
-  default void setShootVelocity(double rpm) {}
+  default void setShootVelocity() {}
+
+  default void runFeeder() {}
 }

@@ -55,4 +55,20 @@ public class BallHandlingCommands extends Command {
         },
         shooter);
   }
+
+  public static Command setRPM(Shooter shooter) {
+    return Commands.sequence(
+    Commands.run(
+        () -> {
+          shooter.setShootVelocity();
+        },
+        shooter).withTimeout(.5),
+    Commands.run(()-> shooter.runFeeder(), shooter));
+  }
+
+  public static Command setShooterRpm(Shooter shooter, double rpm) {
+    return Commands.sequence(
+        BallHandlingCommands.spinShooter(shooter, 0.65).withTimeout(0.5),
+        BallHandlingCommands.spinFeeder(shooter, 0.5).withTimeout(0.5));
+  }
 }

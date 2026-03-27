@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.shooter.Shooter;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -33,6 +34,7 @@ public class Robot extends LoggedRobot {
   private RobotContainer robotContainer;
   public static Pose2d HubPose = new Pose2d(0, 0, new Rotation2d(0));
   public static boolean turnMotorInverted = true;
+  public static Shooter shooter;
 
   public Robot() {
 
