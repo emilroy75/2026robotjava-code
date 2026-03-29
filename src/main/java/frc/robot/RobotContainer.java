@@ -33,6 +33,7 @@ import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.shooter.*;
 import frc.robot.util.ShooterMath;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -58,6 +59,7 @@ public class RobotContainer {
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
+  private final Field2d field = new Field2d();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -158,8 +160,10 @@ public class RobotContainer {
     autoChooser.addOption("Combo-Auto", ComboAuton.shootFuel(shooter, agitator));
 
     // smart dashboard
+    SmartDashboard.putData("field", field);
     SmartDashboard.putNumber("speed", 0);
     SmartDashboard.putNumber("shootvelocityrpm", shooter.getShootVelocityRPM());
+
     // TargetSpeed = SmartDashboard.getNumber("speed", 0);
     // Configure the button bindings
     configureButtonBindings();
@@ -230,14 +234,18 @@ public class RobotContainer {
         .whileTrue(
             DriveCommands.joystickDriveAtAngle(
                 drive,
-                () -> driverController.getLeftX(),
                 () -> driverController.getLeftY(),
-                () -> ShooterMath.getAngleToHub(drive.getPose())));
+                () -> driverController.getLeftX(),
+                () -> ShooterMath.getAngleToHub(drive.getPose()).plus(Rotation2d.kCCW_90deg)));
     driverController
         .y()
         .whileTrue(BallHandlingCommands.setRPM(shooter))
         .whileFalse(Commands.run(() -> shooter.stop(), shooter));
   }
+      public void updateFiels(){
+        field.setRobotPose(drive.getPose());
+        field.getObject("hub").setPose(Robot.HubPose);
+    }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

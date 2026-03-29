@@ -10,6 +10,7 @@ package frc.robot;
 import com.revrobotics.util.StatusLogger;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -75,12 +76,12 @@ public class Robot extends LoggedRobot {
     }
     if (DriverStation.getAlliance().isPresent()
         && DriverStation.getAlliance().get() == Alliance.Red) {
-      HubPose = new Pose2d(182, 158, new Rotation2d(0));
+      HubPose = new Pose2d(Units.inchesToMeters(468), Units.inchesToMeters(158), new Rotation2d(0));
       turnMotorInverted = false;
 
     } else if (DriverStation.getAlliance().isPresent()
         && DriverStation.getAlliance().get() == Alliance.Blue) {
-      HubPose = new Pose2d(468, 158, new Rotation2d(0));
+      HubPose = new Pose2d(Units.inchesToMeters(182),Units.inchesToMeters(158), new Rotation2d(0));
       turnMotorInverted = true;
     }
 
@@ -99,6 +100,7 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during all modes. */
   @Override
   public void robotPeriodic() {
+    robotContainer.updateFiels();
     // Optionally switch the thread to high priority to improve loop
     // timing (see the template project documentation for details)
     // Threads.setCurrentThreadPriority(true, 99);
@@ -131,6 +133,16 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(autonomousCommand);
     }
+        if (DriverStation.getAlliance().isPresent()
+        && DriverStation.getAlliance().get() == Alliance.Red) {
+      HubPose = new Pose2d(Units.inchesToMeters(468), Units.inchesToMeters(158), new Rotation2d(0));
+      turnMotorInverted = false;
+
+    } else if (DriverStation.getAlliance().isPresent()
+        && DriverStation.getAlliance().get() == Alliance.Blue) {
+      HubPose = new Pose2d(Units.inchesToMeters(182),Units.inchesToMeters(158), new Rotation2d(0));
+      turnMotorInverted = true;
+    }
   }
 
   /** This function is called periodically during autonomous. */
@@ -146,6 +158,16 @@ public class Robot extends LoggedRobot {
     // this line or comment it out.
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
+    }
+        if (DriverStation.getAlliance().isPresent()
+        && DriverStation.getAlliance().get() == Alliance.Red) {
+      HubPose = new Pose2d(Units.inchesToMeters(468), Units.inchesToMeters(158), new Rotation2d(0));
+      turnMotorInverted = false;
+
+    } else if (DriverStation.getAlliance().isPresent()
+        && DriverStation.getAlliance().get() == Alliance.Blue) {
+      HubPose = new Pose2d(Units.inchesToMeters(182),Units.inchesToMeters(158), new Rotation2d(0));
+      turnMotorInverted = true;
     }
   }
 

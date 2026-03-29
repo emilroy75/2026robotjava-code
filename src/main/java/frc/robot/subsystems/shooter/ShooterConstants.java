@@ -34,6 +34,7 @@ public class ShooterConstants {
   public static final DCMotor feedGearbox = DCMotor.getNEO(1);
 
   // PID Tuning
-  public static final double shootKp = 0.0001;
-  public static final double shootKv = 12/5767;
+  public static final double shootKp = 0.00049;
+  public static final double shootKv = 12/5676;
+  public static final double targetOffset = 1.44;
 }

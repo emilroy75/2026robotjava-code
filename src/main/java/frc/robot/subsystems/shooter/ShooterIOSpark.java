@@ -60,6 +60,7 @@ public class ShooterIOSpark implements ShooterIO {
     inputs.feedMotorConnected = true;
     inputs.shootSpeed1 = shootMotor1.get();
     inputs.shootSpeed2 = shootMotor2.get();
+    // System.out.println("Applied Volts: " + inputs.shootAppliedVolts);
   }
 
   @Override
@@ -67,8 +68,15 @@ public class ShooterIOSpark implements ShooterIO {
     //  shootController.setSetpoint(rpm, SparkBase.ControlType.kVelocity);
     // SmartDashboard.putNumber("speed", 0);
     TargetVelocity = SmartDashboard.getNumber("speed", 0);
-    shootController.setSetpoint(TargetVelocity, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
+    shootController.setSetpoint(TargetVelocity*targetOffset, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
   }
+  // @Override
+  // public void setMotorRpm(double rpm) {
+  //   //  shootController.setSetpoint(rpm, SparkBase.ControlType.kVelocity);
+  //   // SmartDashboard.putNumber("speed", 0);
+  //   // TargetVelocity = SmartDashboard.getNumber("speed", 0);
+  //   shootController.setSetpoint(rpm*targetOffset, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
+  // }
 
   @Override
   public void runFeeder() {

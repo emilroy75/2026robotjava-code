@@ -53,4 +53,8 @@ public class Shooter extends SubsystemBase {
   public void runFeeder() {
     io.runFeeder();
   }
+
+  // public void setMotorRpm(double rpm) {
+  //   io.setMotorRpm(rpm);
+  // }
 }
