@@ -71,13 +71,13 @@ public class BallHandlingCommands extends Command {
         BallHandlingCommands.spinShooter(shooter, 0.65).withTimeout(0.5),
         BallHandlingCommands.spinFeeder(shooter, 0.5).withTimeout(0.5));
   }
-  // public static Command setMotorRpm(Shooter shooter, double rpm) {
-  //   return Commands.sequence(
-  //   Commands.run(
-  //       () -> {
-  //         shooter.setMotorRpm(rpm);
-  //       },
-  //       shooter).withTimeout(.5),
-  //   Commands.run(()-> shooter.runFeeder(), shooter));
-  // }
+  public static Command setMotorRpm(Shooter shooter, double rpm) {
+    return Commands.sequence(
+    Commands.run(
+        () -> {
+          shooter.setMotorRpm(rpm);
+        },
+        shooter).withTimeout(.5),
+    Commands.run(()-> shooter.runFeeder(), shooter));
+  }
 }

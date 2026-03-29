@@ -70,13 +70,13 @@ public class ShooterIOSpark implements ShooterIO {
     TargetVelocity = SmartDashboard.getNumber("speed", 0);
     shootController.setSetpoint(TargetVelocity*targetOffset, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
   }
-  // @Override
-  // public void setMotorRpm(double rpm) {
-  //   //  shootController.setSetpoint(rpm, SparkBase.ControlType.kVelocity);
-  //   // SmartDashboard.putNumber("speed", 0);
-  //   // TargetVelocity = SmartDashboard.getNumber("speed", 0);
-  //   shootController.setSetpoint(rpm*targetOffset, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
-  // }
+  @Override
+  public void setMotorRpm(double rpm) {
+    //  shootController.setSetpoint(rpm, SparkBase.ControlType.kVelocity);
+    // SmartDashboard.putNumber("speed", 0);
+    // TargetVelocity = SmartDashboard.getNumber("speed", 0);
+    shootController.setSetpoint(rpm*targetOffset, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
+  }
 
   @Override
   public void runFeeder() {

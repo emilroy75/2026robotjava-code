@@ -51,7 +51,7 @@ public class RobotContainer {
   private final Intake intake;
   //   private final Climber climber;
   private final Agitator agitator;
-  private static double TargetSpeed = 0.0;
+  private static double intakespeed = 0.0;
 
   // Controllers
   private final CommandXboxController driverController = new CommandXboxController(0);
@@ -163,6 +163,8 @@ public class RobotContainer {
     SmartDashboard.putData("field", field);
     SmartDashboard.putNumber("speed", 0);
     SmartDashboard.putNumber("shootvelocityrpm", shooter.getShootVelocityRPM());
+    SmartDashboard.putNumber("intake speed", 0);
+
 
     // TargetSpeed = SmartDashboard.getNumber("speed", 0);
     // Configure the button bindings
@@ -227,7 +229,8 @@ public class RobotContainer {
     driverController
         .rightTrigger()
         .whileTrue(
-            (Commands.runEnd(() -> intake.setRollerSpeed(.75), () -> intake.stop(), intake)));
+
+            (Commands.runEnd(() -> intake.setRollerSpeed(0.85), () -> intake.stop(), intake)));
     // auto aim
     driverController
         .rightBumper()
@@ -236,12 +239,17 @@ public class RobotContainer {
                 drive,
                 () -> driverController.getLeftY(),
                 () -> driverController.getLeftX(),
-                () -> ShooterMath.getAngleToHub(drive.getPose()).plus(Rotation2d.kCCW_90deg)));
+                () -> ShooterMath.getAngleToHub(drive.getPose()).plus(Rotation2d.kCW_90deg)));
+    // driverController
+    //     .y()
+    //     .whileTrue(BallHandlingCommands.setRPM(shooter))
+    //     .whileFalse(Commands.run(() -> shooter.stop(), shooter));
+
     driverController
         .y()
-        .whileTrue(BallHandlingCommands.setRPM(shooter))
+        .whileTrue(BallHandlingCommands.setMotorRpm(shooter, ShooterMath.getFinalRPM(ShooterMath.getDistanceToHub(drive.getPose()))))
         .whileFalse(Commands.run(() -> shooter.stop(), shooter));
-  }
+    }
       public void updateFiels(){
         field.setRobotPose(drive.getPose());
         field.getObject("hub").setPose(Robot.HubPose);
