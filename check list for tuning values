@@ -107,3 +107,151 @@
   38. Little overshoot, little oscillation.
 
   If you want, I can also tell you exactly what numbers to copy out of SysId and where to paste them.
+
+
+
+
+
+
+
+
+Use the AdvantageKit Spark swerve template as the baseline and tune your robot in layers.
+
+  Order
+
+  1. Make your hardware constants correct.
+  2. Verify module directions and zero offsets.
+  3. Tune drive characterization/feedforward.
+  4. Tune steering behavior.
+  5. Tune odometry/gyro.
+  6. Tune PathPlanner/autos last.
+
+  1. Match the template structure
+  The important reference files in your code are:
+
+  - src/main/java/frc/robot/subsystems/drive/Drive.java
+  - src/main/java/frc/robot/subsystems/drive/DriveConstants.java
+  - src/main/java/frc/robot/subsystems/drive/Module.java
+  - src/main/java/frc/robot/subsystems/drive/ModuleIOSpark.java
+  - src/main/java/frc/robot/commands/DriveCommands.java
+
+  Use the template as reference for:
+
+  - fixed hardware inversion
+  - fixed module zero offsets
+  - red alliance field-relative flip only in control math
+  - PathPlanner mirroring only in auto logic
+
+  Do not use alliance to change drive motor inversion.
+
+  2. Tune hardware correctness first
+  Before any PID:
+
+  - verify each module’s drive motor spins the correct direction
+  - verify each turn motor rotates the correct direction
+  - verify module zero angles are correct in src/main/java/frc/robot/subsystems/drive/DriveConstants.java
+  - verify wheel radius, track width, wheelbase, gearing
+
+  If these are wrong, tuning will lie to you.
+
+  3. Tune steering first enough to be stable
+  Your turn loop is in src/main/java/frc/robot/subsystems/drive/ModuleIOSpark.java using:
+
+  - turnKp
+  - turnKd
+
+  For steering:
+
+  - command slow movements
+  - watch whether each module snaps cleanly to angle
+  - if it feels lazy, raise turnKp
+  - if it oscillates/hunts, lower turnKp or add a little turnKd
+
+  You want:
+
+  - fast angle response
+  - no chatter
+  - no overshoot spiral
+
+  4. Run drive SysId
+  You already have these commands in src/main/java/frc/robot/RobotContainer.java:
+
+  - drive quasistatic forward/reverse
+  - drive dynamic forward/reverse
+  - simple FF characterization
+  - wheel radius characterization
+
+  Use them.
+
+  Recommended order:
+
+  1. Drive Wheel Radius Characterization
+  2. Drive Simple FF Characterization
+  3. Drive SysId (Quasistatic Forward/Reverse)
+  4. Drive SysId (Dynamic Forward/Reverse)
+
+  Then update in src/main/java/frc/robot/subsystems/drive/DriveConstants.java:
+
+  - driveKs
+  - driveKv
+  - if you later add it, drive acceleration/feedforward terms
+
+  5. Compare your drive code against the template
+  Your biggest risky deviation from AdvantageKit was:
+
+  - src/main/java/frc/robot/subsystems/drive/ModuleIOSpark.java:103 using alliance-based inversion
+
+  That should be treated as suspect first.
+  Template behavior to copy:
+
+  - hardware inversion fixed in constants/config
+  - alliance only affects field-relative math and auto mirroring
+
+  6. Tune teleop feel
+  Once hardware and module behavior are correct:
+
+  - test src/main/java/frc/robot/commands/DriveCommands.java
+  - adjust deadband only if needed
+  - test joystickDrive
+  - test joystickDriveAtAngle
+
+  Look for:
+
+  - drift
+  - delayed response
+  - unexpected rotation during translation
+  - modules fighting each other
+
+  7. Tune odometry
+  Check:
+
+  - robot drives straight when commanded straight
+  - pose estimate matches real field movement
+
+  Relevant files:
+
+  - src/main/java/frc/robot/subsystems/drive/Drive.java
+  - src/main/java/frc/robot/subsystems/drive/GyroIONavX.java
+
+  If odometry is wrong:
+
+  - re-check gyro sign
+  - re-check module zero offsets
+  - re-check wheel radius
+  - re-check trackwidth/wheelbase
+
+  8. Tune PathPlanner last
+  Only after the robot drives correctly manually.
+  Then:
+
+  - make src/main/deploy/pathplanner/settings.json match src/main/java/frc/robot/subsystems/drive/DriveConstants.java
+  - test simple straight auto
+  - test simple rotate auto
+  - only then do complex paths
+
+  Best practical workflow
+
+  - use AdvantageScope logs
+  - change one thing at a time
+  - keep template behavior unless you have a clear reason not to
+  - if your robot differs from the template, first ask whether the difference is hardware-specific or just accidental
