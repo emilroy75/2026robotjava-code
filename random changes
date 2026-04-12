@@ -140,3 +140,250 @@ robotconatiner
   autoChooser.addOption(
       "Shooter SysId (Dynamic)",
       shooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
+
+
+
+
+new one
+
+
+• package frc.robot.subsystems.shooter;
+
+  import org.littletonrobotics.junction.AutoLog;
+
+  public interface ShooterIO {
+
+    @AutoLog
+    class ShooterIOInputs {
+      public double shootPositionRot = 0.0;
+      public double shootVelocityRPM = 0.0;
+      public double feedVelocityRPM = 0.0;
+      public double shootAppliedVolts = 0.0;
+      public double feedAppliedVolts = 0.0;
+      public double shootCurrentAmps = 0.0;
+      public double feedCurrentAmps = 0.0;
+      public boolean shootMotorsConnected = true;
+      public boolean feedMotorConnected = true;
+      public double shootSpeed1 = 0.0;
+      public double shootSpeed2 = 0.0;
+    }
+
+    default void updateInputs(ShooterIOInputs inputs) {}
+
+    default void setShootSpeed(double speed) {}
+
+    default void setFeedSpeed(double speed) {}
+
+    default void setShootVoltage(double volts) {}
+
+    default void stop() {}
+
+    default void setShootVelocity() {}
+
+    default void runFeeder() {}
+
+    default void setMotorRpm(double rpm) {}
+  }
+
+  package frc.robot.subsystems.shooter;
+
+  import com.revrobotics.spark.ClosedLoopSlot;
+
+  import static frc.robot.subsystems.shooter.ShooterConstants.*;
+
+  import com.revrobotics.PersistMode;
+  import com.revrobotics.ResetMode;
+  import com.revrobotics.spark.SparkClosedLoopController;
+  import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+  import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+  import com.revrobotics.spark.SparkMax;
+  import com.revrobotics.spark.config.SparkMaxConfig;
+  import com.revrobotics.spark.SparkBase.ControlType;
+
+  public class ShooterIOSpark implements ShooterIO {
+    private final SparkMax shootMotor1;
+    private final SparkMax shootMotor2;
+    private final SparkMax feedMotor;
+    private final SparkClosedLoopController shootController;
+    public static double TargetVelocity = 0.0;
+    // private static double TargetSpeed = .65;
+
+    public ShooterIOSpark(int shootCanId1, int shootCanId2, int feedCanId) {
+      shootMotor1 = new SparkMax(shootCanId1, MotorType.kBrushless);
+      shootMotor2 = new SparkMax(shootCanId2, MotorType.kBrushless);
+      feedMotor = new SparkMax(feedCanId, MotorType.kBrushless);
+      shootController = shootMotor1.getClosedLoopController();
+      var shootConfig = new SparkMaxConfig();
+      // shootConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(shootCurrentLimitAmps);
+      shootConfig.closedLoop.p(shootKp).feedForward.kV(shootKv);
+      shootConfig.closedLoop.outputRange(0, 1);
+      shootConfig.encoder.velocityConversionFactor(1.0);
+
+      // var followerConfig = new SparkMaxConfig();
+      // followerConfig.idleMode(IdleMode.kCoast).follow(shootMotor1, true);
+
+      // var feedConfig = new SparkMaxConfig();
+      // feedConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(feedCurrentLimitAmps).inverted(true);
+
+      shootMotor1.configure(
+          shootConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      // shootMotor2.configure(
+      //     followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      // feedMotor.configure(feedConfig, ResetMode.kResetSafeParameters,
+      // PersistMode.kPersistParameters);
+    }
+
+    @Override
+    public void updateInputs(ShooterIOInputs inputs) {
+      inputs.shootPositionRot = shootMotor1.getEncoder().getPosition();
+      inputs.shootVelocityRPM = shootMotor1.getEncoder().getVelocity();
+      inputs.feedVelocityRPM = feedMotor.getEncoder().getVelocity();
+      inputs.shootAppliedVolts = shootMotor1.getAppliedOutput() * shootMotor1.getBusVoltage();
+      inputs.feedAppliedVolts = feedMotor.getAppliedOutput() * feedMotor.getBusVoltage();
+      inputs.shootCurrentAmps = shootMotor1.getOutputCurrent();
+      inputs.feedCurrentAmps = feedMotor.getOutputCurrent();
+      inputs.shootMotorsConnected = true;
+      inputs.feedMotorConnected = true;
+      inputs.shootSpeed1 = shootMotor1.get();
+      inputs.shootSpeed2 = shootMotor2.get();
+      // System.out.println("Applied Volts: " + inputs.shootAppliedVolts);
+    }
+
+    @Override
+    public void setShootVelocity() {
+      // shootController.setSetpoint(rpm, SparkBase.ControlType.kVelocity);
+      // SmartDashboard.putNumber("speed", 0);
+      TargetVelocity = SmartDashboard.getNumber("speed", 0);
+      shootController.setSetpoint(
+          TargetVelocity * targetOffset, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
+    }
+
+    @Override
+    public void setMotorRpm(double rpm) {
+      shootController.setSetpoint(rpm * targetOffset, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
+    }
+
+    @Override
+    public void runFeeder() {
+      if (shootMotor1.getEncoder().getVelocity() > (.8 * TargetVelocity) / 2.8) {
+        setFeedSpeed(0.75);
+      } else {
+        setFeedSpeed(0.0);
+      }
+    }
+
+    @Override
+    public void setShootVoltage(double volts) {
+      shootMotor1.setVoltage(volts);
+    }
+
+    @Override
+    public void setShootSpeed(double speed) {
+      shootMotor1.set(speed);
+      // TargetSpeed = speed;
+      // System.out.println("Shooter Speed Set!");
+    }
+
+    @Override
+    public void setFeedSpeed(double speed) {
+      feedMotor.set(speed);
+    }
+
+    @Override
+    public void stop() {
+      shootMotor1.set(0.0);
+      feedMotor.set(0.0);
+    }
+  }
+
+  package frc.robot.subsystems.shooter;
+
+  import edu.wpi.first.wpilibj2.command.Command;
+  import edu.wpi.first.wpilibj2.command.SubsystemBase;
+  import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+  import org.littletonrobotics.junction.Logger;
+
+  public class Shooter extends SubsystemBase {
+
+    private double targtRPM = 0.0;
+    private final ShooterIO io;
+    private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
+    private final SysIdRoutine sysIdRoutine;
+
+    public Shooter(ShooterIO io) {
+      this.io = io;
+
+      this.sysIdRoutine =
+          new SysIdRoutine(
+              new SysIdRoutine.Config(
+                  null,
+                  edu.wpi.first.units.Units.Volts.of(6.0),
+                  null,
+                  (state) -> Logger.recordOutput("Shooter/SysIdState", state.toString())),
+              new SysIdRoutine.Mechanism(
+                  (voltage) -> io.setShootVoltage(voltage.in(edu.wpi.first.units.Units.Volts)),
+                  log -> {
+                    log.motor("shooter")
+                        .voltage(edu.wpi.first.units.Units.Volts.of(inputs.shootAppliedVolts))
+                        .angularPosition(
+                            edu.wpi.first.units.Units.Rotations.of(inputs.shootPositionRot))
+                        .angularVelocity(
+                            edu.wpi.first.units.Units.RPM.of(inputs.shootVelocityRPM));
+                  },
+                  this));
+    }
+
+    @Override
+    public void periodic() {
+      io.updateInputs(inputs);
+      Logger.processInputs("Shooter", inputs);
+      Logger.recordOutput("Shooter/TargetRPM", targtRPM);
+      Logger.recordOutput("Shooter/ActualRPM", inputs.shootVelocityRPM);
+    }
+
+    public void setShootSpeed(double speed) {
+      io.setShootSpeed(speed);
+    }
+
+    public void setFeedSpeed(double speed) {
+      io.setFeedSpeed(speed);
+    }
+
+    public void stop() {
+      io.stop();
+    }
+
+    public double getShootVelocityRPM() {
+      return inputs.shootVelocityRPM;
+    }
+
+    public double getFeedVelocityRPM() {
+      return inputs.feedVelocityRPM;
+    }
+
+    public boolean atTargetRPM(double targetRPM) {
+      return Math.abs(inputs.shootVelocityRPM - targetRPM) < 100.0;
+    }
+
+    public void setShootVelocity() {
+      io.setShootVelocity();
+    }
+
+    public void runFeeder() {
+      io.runFeeder();
+    }
+
+    public void setMotorRpm(double rpm) {
+      io.setMotorRpm(rpm);
+    }
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+      return sysIdRoutine.quasistatic(direction);
+    }
+
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+      return sysIdRoutine.dynamic(direction);
+    }
+  }
