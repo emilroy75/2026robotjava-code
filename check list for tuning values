@@ -1,0 +1,109 @@
+ Checklist
+
+  1. Disable feeding while tuning shooter speed.
+  2. Start with one fixed RPM setpoint from your dashboard or command, something like 3000 RPM.
+  3. Set kP very small and kV, kS, kA to either zero or your rough guesses.
+  4. Spin the shooter and watch actual RPM on SmartDashboard, AdvantageScope, or logs.
+  5. Raise kP a little at a time until the shooter reaches target in a reasonable time.
+  6. Stop increasing kP once you see oscillation, hunting, or obvious overshoot.
+  7. Back kP down slightly from that point.
+
+  Feedforward
+      - whether it overshoots
+      - whether it holds steady
+      - whether it drops too much when you feed a ball
+
+  How to interpret
+
+  - Slow but stable: increase kP
+  - Overshoot or oscillation: decrease kP
+  - Always below target, especially at high RPM: increase kV
+  - Won’t get moving cleanly at lower RPM: increase kS
+  - Good unloaded but bad with balls: you likely need better feedforward, not just more kP
+
+  Practical target
+
+  - Don’t chase perfect control theory.
+  - Tune until it:
+      - reaches target quickly
+      - stays within a usable RPM band
+      - recovers fast enough after a shot
+
+  Best workflow
+
+  - Tune unloaded first
+  - Then test with real balls
+  - Finalize feeder timing only after shooter RPM is stable
+
+
+
+
+
+
+
+
+
+
+
+
+
+ With SysId
+
+  1. Make sure SysId is wired to apply real voltage to the shooter motor.
+  2. Make sure normal shooter control is still separate and uses closed-loop RPM.
+  3. Disable feeder operation during SysId.
+  4. Remove balls from the robot or make sure none can feed into the shooter.
+  5. Put the robot in a safe place where the flywheel can spin freely.
+
+  Run the tests
+  6. Deploy the code with shooter SysId added.
+  7. Open the auto chooser/dashboard.
+  8. Select Shooter SysId (Quasistatic).
+  9. Enable the robot and let the test finish.
+  10. Save the log.
+  11. Select Shooter SysId (Dynamic).
+  12. Enable the robot and let that test finish.
+  13. Save that log too.
+
+  What each test is for
+  14. Quasistatic gives you the most useful kS and kV.
+  15. Dynamic helps estimate kA.
+
+  After running
+  16. Open the log in your logging tool or analysis workflow.
+  17. Extract the feedforward constants.
+  18. Put those constants into your shooter constants file:
+
+  - kS
+  - kV
+  - kA
+
+  Then tune closed-loop
+  19. Keep the SysId feedforward values.
+  20. Start with a small kP.
+  21. Command a fixed RPM like 3000.
+  22. Increase kP until the shooter reaches target fast enough without oscillating.
+  23. Test multiple RPMs.
+  24. Shoot real balls and check recovery.
+
+  What you should not do
+  25. Do not tune kP first and ignore SysId feedforward.
+  26. Do not run SysId through percent output.
+  27. Do not feed balls during SysId.
+  28. Do not leave the normal RPM controller active while SysId is running.
+
+  Practical tuning order after SysId
+  29. Run quasistatic.
+  30. Run dynamic.
+  31. Update kS, kV, kA.
+  32. Hand-tune kP.
+  33. Test with balls.
+  34. Adjust feeder timing only after shooter speed control is stable.
+
+  What “good” looks like
+  35. Shooter reaches target RPM quickly.
+  36. Shooter holds near target before feeding.
+  37. Shooter recovers quickly after each shot.
+  38. Little overshoot, little oscillation.
+
+  If you want, I can also tell you exactly what numbers to copy out of SysId and where to paste them.
