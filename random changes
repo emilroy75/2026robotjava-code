@@ -1,0 +1,142 @@
+  public static Command setMotorRpm(Shooter shooter, double rpm) {
+    return Commands.sequence(
+        Commands.run(() -> shooter.setMotorRpm(rpm), shooter)
+            .until(() -> shooter.atTargetRPM(rpm)),
+        Commands.run(
+            () -> {
+              shooter.setMotorRpm(rpm);
+              shooter.runFeeder();
+            },
+            shooter));
+  }
+
+
+
+  private static final double rpmTolerance = 100.0;
+  private final Debouncer atTargetDebouncer = new Debouncer(0.15);
+
+  public boolean atTargetRPM(double target) {
+    return atTargetDebouncer.calculate(
+        Math.abs(inputs.shootVelocityRPM - target) < rpmTolerance);
+  }
+
+
+
+
+
+
+
+
+• package frc.robot.subsystems.shooter;
+
+  import edu.wpi.first.wpilibj2.command.Command;
+  import edu.wpi.first.wpilibj2.command.SubsystemBase;
+  import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+  import org.littletonrobotics.junction.Logger;
+
+  public class Shooter extends SubsystemBase {
+
+    private double targtRPM = 0.0;
+    private final ShooterIO io;
+    private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
+    private final SysIdRoutine sysIdRoutine;
+
+    public Shooter(ShooterIO io) {
+      this.io = io;
+
+      this.sysIdRoutine =
+          new SysIdRoutine(
+              new SysIdRoutine.Config(
+                  null,
+                  edu.wpi.first.units.Units.Volts.of(6.0),
+                  null,
+                  (state) -> Logger.recordOutput("Shooter/SysIdState", state.toString())),
+              new SysIdRoutine.Mechanism(
+                  (voltage) -> io.setShootVoltage(voltage.in(edu.wpi.first.units.Units.Volts)),
+                  null,
+                  this));
+    }
+
+    @Override
+    public void periodic() {
+      io.updateInputs(inputs);
+      Logger.processInputs("Shooter", inputs);
+      Logger.recordOutput("Shooter/TargetRPM", targtRPM);
+      Logger.recordOutput("Shooter/ActualRPM", inputs.shootVelocityRPM);
+    }
+
+    public void setShootSpeed(double speed) {
+      io.setShootSpeed(speed);
+    }
+
+    public void setFeedSpeed(double speed) {
+      io.setFeedSpeed(speed);
+    }
+
+    public void stop() {
+      io.stop();
+    }
+
+    public double getShootVelocityRPM() {
+      return inputs.shootVelocityRPM;
+    }
+
+    public double getFeedVelocityRPM() {
+      return inputs.feedVelocityRPM;
+    }
+
+    public boolean atTargetRPM(double targetRPM) {
+      return Math.abs(inputs.shootVelocityRPM - targetRPM) < 100.0;
+    }
+
+    public void setShootVelocity() {
+      io.setShootVelocity();
+    }
+
+    public void runFeeder() {
+      io.runFeeder();
+    }
+
+    public void setMotorRpm(double rpm) {
+      io.setMotorRpm(rpm);
+    }
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+      return sysIdRoutine.quasistatic(direction);
+    }
+
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+      return sysIdRoutine.dynamic(direction);
+    }
+  }
+
+
+
+
+
+
+
+
+
+in shooterIo
+default void setShootVoltage(double volts) {}
+
+
+
+
+in shootetrIOspark
+@Override
+public void setShootVoltage(double volts) {
+  shootMotor1.setVoltage(volts);
+}
+
+
+
+robotconatiner
+  autoChooser.addOption(
+      "Shooter SysId (Quasistatic)",
+      shooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+
+  autoChooser.addOption(
+      "Shooter SysId (Dynamic)",
+      shooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
